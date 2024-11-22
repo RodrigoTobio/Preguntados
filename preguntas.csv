@@ -1,0 +1,31 @@
+nivel,pregunta,opciones,respuesta_correcta
+facil,¿Qué función en Python se utiliza para mostrar un mensaje en la consola?,"print();input();output();show()",print()
+facil,¿Qué símbolo se utiliza para comentar una línea en Python?,"#;%;//;/*",#
+facil,¿Cuál es el operador para la división entera en Python?,"/;//;%;**",//
+facil,¿Cómo defines una lista vacía en Python?,"list=[];list=();list={};list=[]",list=[]
+facil,¿Qué función se utiliza para conocer la longitud de una lista?,"len();length();size();count()",len()
+facil,¿Qué tipo de dato es el resultado de la operación 5 / 2 en Python?,"int;float;str;bool",float
+facil,¿Cuál es el tipo de dato de la variable: x = True?,"bool;str;int;float",bool
+facil,¿Cómo conviertes un número entero en una cadena en Python?,"str(x);int(x);float(x);bool(x)",str(x)
+facil,¿Qué operador se utiliza para la concatenación de cadenas?,"+;*;/;%",+
+facil,¿Qué palabra clave se utiliza para definir una función en Python?,"func;define;def;function",def
+normal,¿Qué devuelve la función range(3)?,"[0, 1, 2];range(0, 3);(0, 1, 2);Nada",range(0, 3)
+normal,¿Qué método se usa para añadir un elemento al final de una lista?,"append();add();insert();push()",append()
+normal,¿Qué significa una variable con el prefijo `_` en Python?,"Privada;Protegida;Global;Local",Protegida
+normal,¿Cuál es la salida de: print('Hola' * 3)?,"HolaHolaHola;Hola 3 veces;Error;Nada",HolaHolaHola
+normal,¿Cómo se accede al último elemento de una lista en Python?,"list[-1];list[len(list)];list[last];list.end()",list[-1]
+normal,¿Qué instrucción se usa para manejar excepciones?,"try-catch;try-except;catch-finally;throw-catch",try-except
+normal,¿Cuál es la diferencia entre una tupla y una lista en Python?,"La tupla es inmutable;La tupla no tiene índices;Las listas no soportan strings;No hay diferencia",La tupla es inmutable
+normal,¿Qué método convierte todas las letras de una cadena en minúsculas?,"lower();min();to_lower();downcase()",lower()
+normal,¿Cómo se define una función anónima en Python?,"lambda;def;function;anonymous",lambda
+normal,¿Qué resultado se obtiene de: list(range(1, 5))?,"[1, 2, 3, 4];[1, 2, 3, 4, 5];[0, 1, 2, 3, 4];[0, 1, 2, 3]",[1, 2, 3, 4]
+dificil,¿Qué significa el decorador @staticmethod en Python?,"Define un método de clase;Define un método estático;Define un método privado;Nada, no existe",Define un método estático
+dificil,¿Cómo se define una clase en Python?,"class NombreClase:;def NombreClase:;object NombreClase;struct NombreClase",class NombreClase:
+dificil,¿Qué hace el operador `is` en Python?,"Comprueba igualdad;Comprueba identidad;Compara tipos;Nada",Comprueba identidad
+dificil,¿Qué hace la función `map()` en Python?,"Aplica una función a cada elemento de un iterable;Combina dos iterables;Devuelve un mapa;Nada",Aplica una función a cada elemento de un iterable
+dificil,¿Qué resultado se obtiene al ejecutar: `[x**2 for x in range(3)]`?,"[0, 1, 4];[1, 4, 9];[0, 1, 4, 9];Error",[0, 1, 4]
+dificil,¿Qué es un módulo en Python?,"Un archivo que contiene definiciones y funciones;Un paquete de datos;Una biblioteca externa;Una clase",Un archivo que contiene definiciones y funciones
+dificil,¿Cómo se importa una función específica de un módulo en Python?,"from modulo import funcion;import modulo.funcion;load modulo.funcion;include modulo.funcion",from modulo import funcion
+dificil,¿Qué es un "generador" en Python?,"Una función que devuelve un iterable;Un bucle especial;Un archivo de configuración;Nada",Una función que devuelve un iterable
+dificil,¿Cuál es la salida de: `next(iter([10, 20, 30]))`?,"10;20;30;Error",10
+dificil,¿Qué método en un archivo se utiliza para mover el puntero?,"seek();move();jump();goto()",seek()
