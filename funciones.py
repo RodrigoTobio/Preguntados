@@ -132,7 +132,7 @@ def dibujar_ranking(ventana: pygame.Surface, lista_ranking: list, fuente: pygame
         texto_x = (DIMENSIONES_VENTANA[0] - texto_renderizado.get_width()) // 2
         ventana.blit(texto_renderizado, (texto_x, y_inicial + i * 40))
 
-    boton_texto = "Volver al Menú Principal"
+    boton_texto = "Volver al Menú"
     boton_ancho = 300
     boton_alto = 50
     boton_x = (DIMENSIONES_VENTANA[0] - boton_ancho) // 2
