@@ -56,14 +56,11 @@ def crear_botones(opciones: list, alto: int, ancho:int , espaciado: int) -> list
     
 
     for i, texto in enumerate(opciones):
-        print(i)
         # la posicion en y se calcula (alto+espacio) espacio total a ocupar por cada boton 
         # y lo muliplico por el indice para evitar que se superpongan
         rect = pygame.Rect(x_inicial, y_inicial + i * (alto + espaciado), ancho, alto)
         botones.append((rect, texto))
 
-    print(botones[0])
-    print(type(botones[0]))
 
     return botones
 
@@ -147,5 +144,4 @@ def dibujar_ranking(ventana: pygame.Surface, lista_ranking: list, fuente: pygame
     texto_y = rect_boton.centery - texto_renderizado.get_height() // 2
     ventana.blit(texto_renderizado, (texto_x, texto_y))
 
-    print(type(rect_boton))
     return rect_boton
