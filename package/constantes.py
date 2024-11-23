@@ -2,6 +2,8 @@
 BLANCO = (255, 255, 255)
 NEGRO = (0, 0, 0)
 AZUL_CLARO = (173, 216, 230)
+VERDE_MANZANA = (141, 182, 0)
+VIOLETA = (40, 3, 106)
 
 # Dimensiones de la ventana (ancho,alto)
 DIMENSIONES_VENTANA = (800,600)

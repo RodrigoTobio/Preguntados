@@ -1,7 +1,10 @@
 # funciones.py
 import pygame
-from constantes import *
+import random
+from package.constantes import *
+from pygame import *
 
+# Generales
 def convertir_csv_a_lista_diccionarios(path:str) -> list:
     """
     ¿Que hace?-> Recibe la ruta de un csv lee sus lineas 
@@ -43,7 +46,6 @@ def crear_botones(opciones: list, alto: int, ancho:int , espaciado: int) -> list
         -espaciado:int -> espacio entre botones
     ¿Que retorna? -> Lista de botones(tupla y texto del boton)
     '''
-    print(opciones)
     botones = []
     
     # Calculo espacio total a ocupar por botones + espaciado
@@ -53,13 +55,12 @@ def crear_botones(opciones: list, alto: int, ancho:int , espaciado: int) -> list
     margen_superior = espacio_restante // 2
     x_inicial = (DIMENSIONES_VENTANA[0] - ancho) // 2
     y_inicial = margen_superior
-    
 
-    for i, texto in enumerate(opciones):
-        # la posicion en y se calcula (alto+espacio) espacio total a ocupar por cada boton 
+    for i in range(len(opciones)):
+        # la posicion en y se calcula (alto+espacio) espacio total a ocupar por cada boton
         # y lo muliplico por el indice para evitar que se superpongan
-        rect = pygame.Rect(x_inicial, y_inicial + i * (alto + espaciado), ancho, alto)
-        botones.append((rect, texto))
+        rect = pygame.Rect(x_inicial, y_inicial + i *(alto + espaciado), ancho, alto)
+        botones.append((rect, opciones[i]))
 
 
     return botones
@@ -80,14 +81,13 @@ def dibujar_botones(ventana, botones: list, fuente):
         # borde negro
         pygame.draw.rect(ventana, NEGRO, rect, 2)
 
-        # texto del botón
-        texto_renderizado = fuente.render(texto, True, NEGRO)
+        texto_boton = fuente.render(texto, True, NEGRO)
         
         # Centra el texto en el botón
-        texto_x = rect.centerx - texto_renderizado.get_width() // 2
-        texto_y = rect.centery - texto_renderizado.get_height() // 2
+        texto_x = rect.centerx - texto_boton.get_width() // 2
+        texto_y = rect.centery - texto_boton.get_height() // 2
         
-        ventana.blit(texto_renderizado, (texto_x, texto_y))
+        ventana.blit(texto_boton, (texto_x, texto_y))
 
 def manejar_click_botones(botones: list) -> str|None:
     '''
@@ -103,45 +103,26 @@ def manejar_click_botones(botones: list) -> str|None:
             return texto
     return None
 
-
-def dibujar_ranking(ventana: pygame.Surface, lista_ranking: list, fuente: pygame.font.Font):
+def ajustar_texto(texto: str, fuente: pygame.font.Font, ancho_maximo: int) -> list:
     '''
-    ¿Que hace? -> Dibuja la pantalla del ranking
-    ¿Que parametros acepta?
-        -ventana:pygame.Surface -> Superficie donde se van 
-                                    a dibujar los botones
-        -lista_ranking:list -> lista de usuarios,puntuaciones,tiempo
-        -fuente:pygame.font.Font -> fuente utilizada para los textos
-    ¿Que retorna?:pygame.rect.Rect -> rectangulo de pygame del boton para
-                                        volver al menú principal
+    ¿Qué hace?
+    ¿Qué parámetros acepta?
+    ¿Qué retorna?
     '''
+    palabras = texto.split()
+    lineas = []
+    linea_actual = ""
 
-    ventana.fill(NEGRO)
+    for palabra in palabras:
+        if fuente.size(linea_actual + palabra)[0] <= ancho_maximo:
+            linea_actual += palabra + " "
+        else:
+            lineas.append(linea_actual.strip())
+            linea_actual = palabra + " "
 
-    titulo_texto = fuente.render("Ranking", True, BLANCO)
-    titulo_x = (DIMENSIONES_VENTANA[0] - titulo_texto.get_width()) // 2
-    ventana.blit(titulo_texto, (titulo_x, 20))
+    if linea_actual:
+        lineas.append(linea_actual.strip())
 
-    y_inicial = 120
-    for i, entrada in enumerate(lista_ranking):
-        texto = f"{i + 1}. {entrada['usuario']} - {entrada['puntaje']} - {entrada['tiempo']}"
-        texto_renderizado = fuente.render(texto, True, BLANCO)
-        texto_x = (DIMENSIONES_VENTANA[0] - texto_renderizado.get_width()) // 2
-        ventana.blit(texto_renderizado, (texto_x, y_inicial + i * 40))
+    return lineas
 
-    boton_texto = "Volver al Menú"
-    boton_ancho = 300
-    boton_alto = 50
-    boton_x = (DIMENSIONES_VENTANA[0] - boton_ancho) // 2
-    boton_y = DIMENSIONES_VENTANA[1] - boton_alto - 20
-
-    rect_boton = pygame.Rect(boton_x, boton_y, boton_ancho, boton_alto)
-    pygame.draw.rect(ventana, AZUL_CLARO, rect_boton)
-    pygame.draw.rect(ventana, NEGRO, rect_boton, 2)
-
-    texto_renderizado = fuente.render(boton_texto, True, NEGRO)
-    texto_x = rect_boton.centerx - texto_renderizado.get_width() // 2
-    texto_y = rect_boton.centery - texto_renderizado.get_height() // 2
-    ventana.blit(texto_renderizado, (texto_x, texto_y))
-
-    return rect_boton
+    
