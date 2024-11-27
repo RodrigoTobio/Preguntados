@@ -1,6 +1,4 @@
-# funciones.py
 import pygame
-import random
 from package.constantes import *
 from pygame import *
 
@@ -19,10 +17,8 @@ def convertir_csv_a_lista_diccionarios(path:str) -> list:
     
     with open(path, mode='r', encoding='utf-8') as archivo:
         lineas = archivo.readlines()
-        
         encabezados = lineas[0].strip().split(',')
-        
-
+    
         for linea in lineas[1:]:
             valores = linea.strip().split(',')
 
@@ -33,6 +29,25 @@ def convertir_csv_a_lista_diccionarios(path:str) -> list:
             lista_diccionarios.append(fila_diccionario)
     
     return lista_diccionarios
+
+def convertir_lista_diccionarios_a_csv(lista_diccionarios: list, path: str):
+    """
+    ¿Qué hace? -> Convierte una lista de diccionarios a un archivo CSV.
+    ¿Qué parámetros acepta?
+        - lista_diccionarios: list -> Lista de diccionarios que se quiere guardar en CSV.
+        - path: str -> Ruta donde se guardará el archivo CSV.
+    ¿Qué retorna? -> None
+    """
+    if len(lista_diccionarios) > 0:
+        encabezados = lista_diccionarios[0].keys()
+
+        with open(path, mode='w', encoding='utf-8', newline='') as archivo:
+            archivo.write(','.join(encabezados) + '\n')
+            for diccionario in lista_diccionarios:
+                fila = []
+                for i in diccionario.values():
+                    fila.append(i)
+                archivo.write(','.join(fila) + '\n')
 
 def crear_botones(opciones: list, alto: int, ancho:int , espaciado: int) -> list:
     '''
@@ -124,5 +139,13 @@ def ajustar_texto(texto: str, fuente: pygame.font.Font, ancho_maximo: int) -> li
         lineas.append(linea_actual.strip())
 
     return lineas
+
+def obtener_puntaje_y_convertir_a_entero(diccionario: dict) -> int:
+    puntaje_a_entero = int(diccionario['puntaje'])
+    return puntaje_a_entero
+
+def ordenar_lista_diccionarios(lista:list):
+    lista_ordenada = sorted(lista, key=obtener_puntaje_y_convertir_a_entero, reverse=True)
+    return lista_ordenada
 
     

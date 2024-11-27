@@ -46,7 +46,8 @@ while iniciado:
                     print(f"Has hecho clic en '{boton_clickeado}'")
                     match boton_clickeado:
                         case "Jugar Partida":
-                            dibujar_partida(ventana, lista_preguntas, fuente)
+                            dibujar_partida(
+                                ventana, lista_preguntas, fuente, lista_ranking)
                             mostrar_partida = False
                         case "Ranking":
                             mostrar_ranking = True

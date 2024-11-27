@@ -4,7 +4,22 @@ from package.constantes import *
 from pygame import *
 from package.funciones_generales import *
 
+#Boton para volver al menú principal
+def crear_boton_menu(ventana: pygame.Surface, fuente: pygame.font.Font):
+    #Botón para volver al menú
+    rect_boton = pygame.Rect(BOTON_X, BOTON_Y, BOTON_ANCHO, BOTON_ALTO)
+    pygame.draw.rect(ventana, AZUL_CLARO, rect_boton)
+    pygame.draw.rect(ventana, NEGRO, rect_boton, 2)
+
+    texto_renderizado = fuente.render(BOTON_TEXTO, True, NEGRO)
+    texto_x = rect_boton.centerx - texto_renderizado.get_width() // 2
+    texto_y = rect_boton.centery - texto_renderizado.get_height() // 2
+    ventana.blit(texto_renderizado, (texto_x, texto_y))
+
+    return rect_boton
+
 # Pantalla de ranking
+# Modificar ranking si el puntaje obtenido es mayor al menor de la lista
 def dibujar_ranking(ventana: pygame.Surface, lista_ranking: list, fuente: pygame.font.Font) -> pygame.rect.Rect:
     '''
     ¿Que hace? -> Dibuja la pantalla del ranking con formato de tabla
@@ -15,16 +30,16 @@ def dibujar_ranking(ventana: pygame.Surface, lista_ranking: list, fuente: pygame
     ¿Que retorna?:pygame.rect.Rect -> rectángulo de pygame del botón para volver al menú principal
     '''
 
-    ventana.fill(NEGRO)
+    # ventana.fill(NEGRO)
 
-    # fondo = pygame.image.load("assets/fondo5.jpg")
-    # fondo = pygame.transform.scale(fondo, (DIMENSIONES_VENTANA))
+    fondo = pygame.image.load("assets/fondo4.jpg")
+    fondo = pygame.transform.scale(fondo, (DIMENSIONES_VENTANA))
 
-    # ventana.blit(fondo, (0, 0))
+    ventana.blit(fondo, (0, 0))
 
-    columna_usuario_texto = fuente.render("Usuario", True, BLANCO)
-    columna_puntaje_texto = fuente.render("Puntuación", True, BLANCO)
-    columna_tiempo_texto = fuente.render("Tiempo", True, BLANCO)
+    columna_usuario_texto = fuente.render("Usuario", True, NEGRO)
+    columna_puntaje_texto = fuente.render("Puntuación", True, NEGRO)
+    columna_tiempo_texto = fuente.render("Tiempo", True, NEGRO)
 
     # Posicion de los títulos
     y_inicial = 60
@@ -36,16 +51,16 @@ def dibujar_ranking(ventana: pygame.Surface, lista_ranking: list, fuente: pygame
                  DIMENSIONES_VENTANA[0] // 4 - columna_tiempo_texto.get_width() // 2, y_inicial))
 
     # Linea blanca
-    pygame.draw.line(ventana, BLANCO, (50, y_inicial + 30),
+    pygame.draw.line(ventana, NEGRO, (50, y_inicial + 30),
                      (DIMENSIONES_VENTANA[0] - 50, y_inicial + 30), 2)
 
     # Espacio para las filas
     y_inicial += 40
 
     for i, entrada in enumerate(lista_ranking):
-        texto_usuario = fuente.render(entrada['usuario'], True, BLANCO)
-        texto_puntaje = fuente.render(str(entrada['puntaje']), True, BLANCO)
-        texto_tiempo = fuente.render(str(entrada['tiempo']), True, BLANCO)
+        texto_usuario = fuente.render(entrada['usuario'], True, NEGRO)
+        texto_puntaje = fuente.render(str(entrada['puntaje']), True, NEGRO)
+        texto_tiempo = fuente.render(str(entrada['tiempo']), True, NEGRO)
 
         # Posición de la columna
         ventana.blit(
@@ -55,22 +70,9 @@ def dibujar_ranking(ventana: pygame.Surface, lista_ranking: list, fuente: pygame
         ventana.blit(
             texto_tiempo, (3 * DIMENSIONES_VENTANA[0] // 4 - texto_tiempo.get_width() // 2, y_inicial + i * 40))
 
-    boton_texto = "Volver al Menú"
-    boton_ancho = 300
-    boton_alto = 50
-    boton_x = (DIMENSIONES_VENTANA[0] - boton_ancho) // 2
-    boton_y = DIMENSIONES_VENTANA[1] - boton_alto - 20
-
-    rect_boton = pygame.Rect(boton_x, boton_y, boton_ancho, boton_alto)
-    pygame.draw.rect(ventana, AZUL_CLARO, rect_boton)
-    pygame.draw.rect(ventana, NEGRO, rect_boton, 2)
-
-    texto_renderizado = fuente.render(boton_texto, True, NEGRO)
-    texto_x = rect_boton.centerx - texto_renderizado.get_width() // 2
-    texto_y = rect_boton.centery - texto_renderizado.get_height() // 2
-    ventana.blit(texto_renderizado, (texto_x, texto_y))
-
-    return rect_boton
+    #Botón para volver al menú
+    respuesta_boton_volver_menu_principal = crear_boton_menu(ventana, fuente)
+    return respuesta_boton_volver_menu_principal
 
 # Pantalla de configuraciones
 def dibujar_configuraciones(ventana: pygame.Surface, fuente: pygame.font.Font) -> pygame.rect.Rect:
@@ -80,7 +82,12 @@ def dibujar_configuraciones(ventana: pygame.Surface, fuente: pygame.font.Font) -
     ¿Qué retorna?
     '''
 
-    ventana.fill(NEGRO)
+    # ventana.fill(NEGRO)
+
+    fondo = pygame.image.load("assets/fondo4.jpg")
+    fondo = pygame.transform.scale(fondo, (DIMENSIONES_VENTANA))
+
+    ventana.blit(fondo, (0, 0))
 
     titulo_texto = fuente.render("Configuraciones", True, NEGRO)
     titulo_x = (DIMENSIONES_VENTANA[0] - titulo_texto.get_width()) // 2
@@ -91,25 +98,77 @@ def dibujar_configuraciones(ventana: pygame.Surface, fuente: pygame.font.Font) -
 
     dibujar_botones(ventana, botones, fuente)
 
-    boton_texto = "Volver al Menú"
-    boton_ancho = 300
-    boton_alto = 50
-    boton_x = (DIMENSIONES_VENTANA[0] - boton_ancho) // 2
-    boton_y = DIMENSIONES_VENTANA[1] - boton_alto - 20
+    #Botón para volver al menú
+    respuesta_boton_volver_menu_principal = crear_boton_menu(ventana, fuente)
+    return respuesta_boton_volver_menu_principal
 
-    rect_boton = pygame.Rect(boton_x, boton_y, boton_ancho, boton_alto)
-    pygame.draw.rect(ventana, AZUL_CLARO, rect_boton)
-    pygame.draw.rect(ventana, NEGRO, rect_boton, 2)
-
-    texto_renderizado = fuente.render(boton_texto, True, NEGRO)
-    texto_x = rect_boton.centerx - texto_renderizado.get_width() // 2
-    texto_y = rect_boton.centery - texto_renderizado.get_height() // 2
-    ventana.blit(texto_renderizado, (texto_x, texto_y))
-
-    return rect_boton
 
 # Pantalla de la partida
-def dibujar_partida(ventana: pygame.Surface, preguntas: list, fuente: pygame.font.Font) -> pygame.rect.Rect:
+# Pedir nombre al usuario
+def pedir_nombre_usuario(ventana: pygame.Surface, fuente: pygame.font.Font, puntaje: int, cantidad_preguntas):
+    # Solicitar nombre al usuario
+    nombre_ingresado = ""
+    bandera_pedir_nombre = True
+
+    while bandera_pedir_nombre:
+
+        ventana.fill(NEGRO)
+        # Mostrar puntaje final
+        resultado_texto = fuente.render(f"Puntaje final: {puntaje}/{cantidad_preguntas}", True, BLANCO)
+        ventana.blit(resultado_texto, (DIMENSIONES_VENTANA[0] // 2 - resultado_texto.get_width() // 2, (DIMENSIONES_VENTANA[1] // 3 - 50)))
+
+        mensaje = fuente.render("Ingrese su nombre:", True, BLANCO)
+        ventana.blit(mensaje, (DIMENSIONES_VENTANA[0] // 2 - mensaje.get_width() // 2, DIMENSIONES_VENTANA[1] // 3))
+
+        nombre_texto = fuente.render(nombre_ingresado, True, VERDE_MANZANA)
+        ventana.blit(nombre_texto, (DIMENSIONES_VENTANA[0] // 2 - nombre_texto.get_width() // 2, DIMENSIONES_VENTANA[1] // 2))
+
+        pygame.display.flip()
+
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_RETURN:
+                    bandera_pedir_nombre = False
+                elif evento.key == pygame.K_BACKSPACE:
+                    nombre_ingresado = nombre_ingresado[:-1]
+                else:
+                    nombre_ingresado += evento.unicode
+
+    return nombre_ingresado
+
+def buscar_menor_puntaje_ranking(lista: list) -> int:
+    '''
+    '''
+    min_valor = int(lista[0]['puntaje'])
+    indice_menor_valor = 0
+
+    for i in range(1, len(lista)):
+        if int(lista[i]['puntaje']) < min_valor:
+            min_valor = int(lista[i]['puntaje'])
+            indice_menor_valor = i
+
+    return indice_menor_valor
+
+def modificar_ranking(lista: list, datos_jugador: dict):
+    '''
+    '''
+    indice = buscar_menor_puntaje_ranking(lista)
+    datos = lista[indice]
+
+    if int(datos_jugador['puntaje']) > int(datos['puntaje']):
+        lista[indice] = datos_jugador
+    elif (int(datos_jugador['puntaje']) == int(datos['puntaje']) and 
+          int(datos_jugador['tiempo']) < int(datos['tiempo'])):
+        lista[indice] = datos_jugador
+
+    # return lista
+    # MODIFICAR ACA PARA CAMBIAR RANKING
+
+
+
+def dibujar_partida(ventana: pygame.Surface, preguntas: list, fuente: pygame.font.Font, lista_ranking: list) -> pygame.rect.Rect:
     '''
     ¿Qué hace?
     ¿Qué parámetros acepta?
@@ -163,33 +222,23 @@ def dibujar_partida(ventana: pygame.Surface, preguntas: list, fuente: pygame.fon
 
         indice_pregunta += 1
 
-    # Mostrar puntaje final
-    ventana.fill(NEGRO)
-    resultado_texto = fuente.render(f"Puntaje final: {puntaje}/{len(preguntas)}", True, BLANCO)
-    ventana.blit(resultado_texto, (DIMENSIONES_VENTANA[0] // 2 -
-                 resultado_texto.get_width() // 2, DIMENSIONES_VENTANA[1] // 3))
+    nombre_usuario = pedir_nombre_usuario(ventana,fuente,puntaje,len(preguntas))
+    datos_jugador = {'usuario': nombre_usuario,'puntaje': puntaje, 'tiempo': 30}
+    #Verifico si el puntaje obtenido es mayor al menor del ranking
+    nuevo_ranking = modificar_ranking(lista_ranking, datos_jugador)
+    print(nuevo_ranking)
 
     # Botón para volver al menú
-    boton_texto = "Volver al Menú"
-    boton_ancho = 300
-    boton_alto = 50
-    boton_x = (DIMENSIONES_VENTANA[0] - boton_ancho) // 2
-    boton_y = DIMENSIONES_VENTANA[1] // 2
-
-    rect_boton = pygame.Rect(boton_x, boton_y, boton_ancho, boton_alto)
-    pygame.draw.rect(ventana, AZUL_CLARO, rect_boton)
-    pygame.draw.rect(ventana, NEGRO, rect_boton, 2)
-
-    texto_renderizado = fuente.render(boton_texto, True, NEGRO)
-    texto_x = rect_boton.centerx - texto_renderizado.get_width() // 2
-    texto_y = rect_boton.centery - texto_renderizado.get_height() // 2
-    ventana.blit(texto_renderizado, (texto_x, texto_y))
+    respuesta_boton_volver_menu_principal = crear_boton_menu(ventana, fuente)
 
     pygame.display.flip()
 
+    
     while True:
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 pygame.quit()
-            if evento.type == pygame.MOUSEBUTTONDOWN and rect_boton.collidepoint(evento.pos):
-                return rect_boton
+            if evento.type == pygame.MOUSEBUTTONDOWN and respuesta_boton_volver_menu_principal.collidepoint(evento.pos):
+                return respuesta_boton_volver_menu_principal
+
+
