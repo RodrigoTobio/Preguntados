@@ -17,6 +17,7 @@ fuente = pygame.font.Font(None, 48)
 opciones_menu_principal = ["Jugar Partida", "Ranking", "Configuración", "Salir"]
 botones_menu_principal = crear_botones(opciones_menu_principal, DIMENSIONES_BOTONES_MENU_PRINCIPAL[1], DIMENSIONES_BOTONES_MENU_PRINCIPAL[0], DIMENSIONES_BOTONES_MENU_PRINCIPAL[2])
 
+
 iniciado = True
 mostrar_ranking = False
 mostrar_configuraciones = False

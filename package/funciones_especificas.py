@@ -31,16 +31,11 @@ def dibujar_ranking(ventana: pygame.Surface, fuente: pygame.font.Font) -> pygame
     '''
     lista_ranking = convertir_csv_a_lista_diccionarios('csv/ranking.csv')
 
-    # ventana.fill(NEGRO)
+    ventana.fill(NEGRO)
 
-    fondo = pygame.image.load("assets/fondo4.jpg")
-    fondo = pygame.transform.scale(fondo, (DIMENSIONES_VENTANA))
-
-    ventana.blit(fondo, (0, 0))
-
-    columna_usuario_texto = fuente.render("Usuario", True, NEGRO)
-    columna_puntaje_texto = fuente.render("Puntuación", True, NEGRO)
-    columna_tiempo_texto = fuente.render("Tiempo", True, NEGRO)
+    columna_usuario_texto = fuente.render("Usuario", True, BLANCO)
+    columna_puntaje_texto = fuente.render("Puntuación", True, BLANCO)
+    columna_tiempo_texto = fuente.render("Tiempo", True, BLANCO)
 
     # Posicion de los títulos
     y_inicial = 60
@@ -52,16 +47,16 @@ def dibujar_ranking(ventana: pygame.Surface, fuente: pygame.font.Font) -> pygame
                  DIMENSIONES_VENTANA[0] // 4 - columna_tiempo_texto.get_width() // 2, y_inicial))
 
     # Linea blanca
-    pygame.draw.line(ventana, NEGRO, (50, y_inicial + 30),
+    pygame.draw.line(ventana, BLANCO, (50, y_inicial + 30),
                      (DIMENSIONES_VENTANA[0] - 50, y_inicial + 30), 2)
 
     # Espacio para las filas
     y_inicial += 40
 
     for i, entrada in enumerate(lista_ranking):
-        texto_usuario = fuente.render(entrada['usuario'], True, NEGRO)
-        texto_puntaje = fuente.render(str(entrada['puntaje']), True, NEGRO)
-        texto_tiempo = fuente.render(str(entrada['tiempo']), True, NEGRO)
+        texto_usuario = fuente.render(entrada['usuario'], True, BLANCO)
+        texto_puntaje = fuente.render(str(entrada['puntaje']), True, BLANCO)
+        texto_tiempo = fuente.render(str(entrada['tiempo']), True, BLANCO)
 
         # Posición de la columna
         ventana.blit(
@@ -106,7 +101,17 @@ def dibujar_configuraciones(ventana: pygame.Surface, fuente: pygame.font.Font) -
 
 # Pantalla de la partida
 # Pedir nombre al usuario
-def pedir_nombre_usuario(ventana: pygame.Surface, fuente: pygame.font.Font, puntaje: int, cantidad_preguntas):
+def filtrar_preguntas_por_dificultad(dificultad: str):
+    preguntas = convertir_csv_a_lista_diccionarios("csv/preguntas.csv")
+    preguntas_filtradas = []
+    for pregunta in preguntas[1:]:
+        if pregunta['dificultad'] == dificultad:
+            preguntas_filtradas.append(pregunta)
+
+    return preguntas_filtradas
+
+
+def pedir_nombre_usuario(ventana: pygame.Surface, fuente: pygame.font.Font, cantidad_respuestas_correctas: int, total: int):
     '''
     '''
     nombre_ingresado = ""
@@ -116,7 +121,7 @@ def pedir_nombre_usuario(ventana: pygame.Surface, fuente: pygame.font.Font, punt
 
         ventana.fill(NEGRO)
         # Mostrar puntaje final
-        resultado_texto = fuente.render(f"Puntaje final: {puntaje}/{cantidad_preguntas}", True, BLANCO)
+        resultado_texto = fuente.render(f"Puntaje final: {cantidad_respuestas_correctas}/{total}", True, BLANCO)
         ventana.blit(resultado_texto, (DIMENSIONES_VENTANA[0] // 2 - resultado_texto.get_width() // 2, (DIMENSIONES_VENTANA[1] // 3 - 50)))
 
         mensaje = fuente.render("Ingrese su nombre:", True, BLANCO)
@@ -148,6 +153,9 @@ def buscar_menor_puntaje_ranking(lista: list) -> int:
 
     for i in range(1, len(lista)):
         if int(lista[i]['puntaje']) < min_valor:
+            min_valor = int(lista[i]['puntaje'])
+            indice_menor_valor = i
+        elif int(lista[i]['puntaje']) == min_valor:
             if indice_menor_valor > i:
                 min_valor = int(lista[i]['puntaje'])
                 indice_menor_valor = i
@@ -173,11 +181,15 @@ def modificar_ranking(datos_jugador: dict):
 def dibujar_partida(ventana: pygame.Surface, fuente: pygame.font.Font) -> pygame.rect.Rect:
     '''
     '''
+    configuraciones = convertir_csv_a_lista_diccionarios('csv/configuraciones.csv')
+    dificultad = configuraciones[0]['valor_elegido'].strip("'")
+    puntaje_por_acierto = int(configuraciones[1]['valor_elegido'])
+    tiempo_por_pregunta = int(configuraciones[2]['valor_elegido'])
 
-    preguntas = convertir_csv_a_lista_diccionarios("csv/preguntas.csv")
+    preguntas = filtrar_preguntas_por_dificultad(dificultad)
     random.shuffle(preguntas)
 
-    puntaje = 0
+    correctas = 0
     indice_pregunta = 0
     tiempo_utilizado = 0
 
@@ -203,8 +215,8 @@ def dibujar_partida(ventana: pygame.Surface, fuente: pygame.font.Font) -> pygame
             y_actual += texto_pregunta.get_height() + 10
 
         # Opciones
-        botones_opciones = crear_botones(
-            opciones, DIMENSIONES_BOTONES_MENU_PRINCIPAL[1], DIMENSIONES_BOTONES_MENU_PRINCIPAL[0], DIMENSIONES_BOTONES_MENU_PRINCIPAL[2])
+        botones_opciones = crear_botones(opciones, DIMENSIONES_BOTONES_MENU_PRINCIPAL[1],
+                                          DIMENSIONES_BOTONES_MENU_PRINCIPAL[0], DIMENSIONES_BOTONES_MENU_PRINCIPAL[2])
         dibujar_botones(ventana, botones_opciones, fuente)
 
         pygame.display.flip()
@@ -222,7 +234,7 @@ def dibujar_partida(ventana: pygame.Surface, fuente: pygame.font.Font) -> pygame
                     respuesta_usuario = manejar_click_botones(botones_opciones)
 
             # Actualizar el contador de tiempo
-            tiempo_maximo = 10
+            tiempo_maximo = tiempo_por_pregunta
             tiempo_actual = pygame.time.get_ticks()
             tiempo_restante = max(0, tiempo_maximo - (tiempo_actual - tiempo_inicio) // 1000)
 
@@ -243,12 +255,14 @@ def dibujar_partida(ventana: pygame.Surface, fuente: pygame.font.Font) -> pygame
 
         # Verifica si es correcta
         if respuesta_usuario == respuesta_correcta:
-            puntaje += 1
+            correctas += 1
 
         indice_pregunta += 1
 
-    nombre_usuario = pedir_nombre_usuario(ventana, fuente, puntaje, len(preguntas))
-    datos_jugador = {'usuario': nombre_usuario, 'puntaje': str(puntaje), 'tiempo': str(tiempo_utilizado)}
+    nombre_usuario = pedir_nombre_usuario(ventana, fuente, correctas, len(preguntas))
+
+    puntaje_jugador = correctas * puntaje_por_acierto
+    datos_jugador = {'usuario': nombre_usuario, 'puntaje': str(puntaje_jugador), 'tiempo': str(tiempo_utilizado)}
     
     # Verifico si el puntaje obtenido es mayor al menor del ranking
     modificar_ranking(datos_jugador)
