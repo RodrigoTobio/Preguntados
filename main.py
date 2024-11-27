@@ -9,7 +9,7 @@ pygame.init()
 ventana = pygame.display.set_mode(DIMENSIONES_VENTANA)
 pygame.display.set_caption("Preguntados")
 
-fondo = pygame.image.load("assets/fondo3.jpg")
+fondo = pygame.image.load(RUTA_FONDO_MENU)
 fondo = pygame.transform.scale(fondo, (DIMENSIONES_VENTANA))
 fuente = pygame.font.Font(None, 48)
 

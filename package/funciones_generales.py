@@ -148,4 +148,3 @@ def ordenar_lista_diccionarios(lista:list):
     lista_ordenada = sorted(lista, key=obtener_puntaje_y_convertir_a_entero, reverse=True)
     return lista_ordenada
 
-

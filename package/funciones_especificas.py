@@ -29,7 +29,7 @@ def dibujar_ranking(ventana: pygame.Surface, fuente: pygame.font.Font) -> pygame
         -fuente:pygame.font.Font -> fuente utilizada para los textos
     ¿Que retorna?:pygame.rect.Rect -> rectángulo de pygame del botón para volver al menú principal
     '''
-    lista_ranking = convertir_csv_a_lista_diccionarios('csv/ranking.csv')
+    lista_ranking = convertir_csv_a_lista_diccionarios(RUTA_RANKING_CSV)
 
     ventana.fill(NEGRO)
 
@@ -94,22 +94,20 @@ def dibujar_configuraciones(ventana: pygame.Surface, fuente: pygame.font.Font) -
 
     dibujar_botones(ventana, botones, fuente)
 
-    #Botón para volver al menú
+    # Botón para volver al menú
     respuesta_boton_volver_menu_principal = crear_boton_menu(ventana, fuente)
     return respuesta_boton_volver_menu_principal
-
 
 # Pantalla de la partida
 # Pedir nombre al usuario
 def filtrar_preguntas_por_dificultad(dificultad: str):
-    preguntas = convertir_csv_a_lista_diccionarios("csv/preguntas.csv")
+    preguntas = convertir_csv_a_lista_diccionarios(RUTA_PREGUNTAS_CSV)
     preguntas_filtradas = []
     for pregunta in preguntas[1:]:
         if pregunta['dificultad'] == dificultad:
             preguntas_filtradas.append(pregunta)
 
     return preguntas_filtradas
-
 
 def pedir_nombre_usuario(ventana: pygame.Surface, fuente: pygame.font.Font, cantidad_respuestas_correctas: int, total: int):
     '''
@@ -165,7 +163,7 @@ def buscar_menor_puntaje_ranking(lista: list) -> int:
 def modificar_ranking(datos_jugador: dict):
     '''
     '''
-    lista = convertir_csv_a_lista_diccionarios('csv/ranking.csv')
+    lista = convertir_csv_a_lista_diccionarios(RUTA_RANKING_CSV)
     indice = buscar_menor_puntaje_ranking(lista)
     datos = lista[indice]
 
@@ -176,12 +174,12 @@ def modificar_ranking(datos_jugador: dict):
         lista[indice] = datos_jugador
 
     lista = ordenar_lista_diccionarios(lista)
-    convertir_lista_diccionarios_a_csv(lista,'csv/ranking.csv')
+    convertir_lista_diccionarios_a_csv(lista, RUTA_RANKING_CSV)
 
 def dibujar_partida(ventana: pygame.Surface, fuente: pygame.font.Font) -> pygame.rect.Rect:
     '''
     '''
-    configuraciones = convertir_csv_a_lista_diccionarios('csv/configuraciones.csv')
+    configuraciones = convertir_csv_a_lista_diccionarios(RUTA_CONFIGURACIONES_CSV)
     dificultad = configuraciones[0]['valor_elegido'].strip("'")
     puntaje_por_acierto = int(configuraciones[1]['valor_elegido'])
     tiempo_por_pregunta = int(configuraciones[2]['valor_elegido'])
