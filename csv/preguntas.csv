@@ -4,8 +4,8 @@ facil,¿Qué símbolo se utiliza para comentar una línea en Python?,"#;%;//;/*"
 facil,¿Cuál es el operador para la división entera en Python?,"/;//;%;**",//
 facil,¿Cómo defines una lista vacía en Python?,"list=[];list=();list={};list="",list=[]
 facil,¿Qué función se utiliza para conocer la longitud de una lista?,"len();length();size();count()",len()
-facil,¿Qué función en Python se utiliza para mostrar un mensaje en la consola?,"print();input();output();show()",print()
-facil,¿Qué símbolo se utiliza para comentar una línea en Python?,"#;%;//;/*",#
-facil,¿Cuál es el operador para la división entera en Python?,"/;//;%;**",//
-facil,¿Cómo defines una lista vacía en Python?,"list=[];list=();list={};list="",list=[]
-facil,¿Qué función se utiliza para conocer la longitud de una lista?,"len();length();size();count()",len()
+facil,¿Qué tipo de dato se utiliza para representar palabras en Python?,"string;str;word;txt",str
+facil,¿Cómo se realiza la concatenación de cadenas en Python?,"join();concat();+;merge()",+
+facil,¿Qué función se utiliza para convertir un número a un entero en Python?,"int();long();float();str()",int()
+facil,¿Cuál es el resultado de la expresión 3 + 5 * 2 en Python?,"16;13;11;10",13
+facil,¿Cómo se verifica si un elemento está presente en una lista en Python?,"check();find();in;exists()",in

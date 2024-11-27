@@ -107,7 +107,8 @@ def dibujar_configuraciones(ventana: pygame.Surface, fuente: pygame.font.Font) -
 # Pantalla de la partida
 # Pedir nombre al usuario
 def pedir_nombre_usuario(ventana: pygame.Surface, fuente: pygame.font.Font, puntaje: int, cantidad_preguntas):
-    # Solicitar nombre al usuario
+    '''
+    '''
     nombre_ingresado = ""
     bandera_pedir_nombre = True
 
@@ -147,8 +148,9 @@ def buscar_menor_puntaje_ranking(lista: list) -> int:
 
     for i in range(1, len(lista)):
         if int(lista[i]['puntaje']) < min_valor:
-            min_valor = int(lista[i]['puntaje'])
-            indice_menor_valor = i
+            if indice_menor_valor > i:
+                min_valor = int(lista[i]['puntaje'])
+                indice_menor_valor = i
 
     return indice_menor_valor
 
@@ -170,16 +172,14 @@ def modificar_ranking(datos_jugador: dict):
 
 def dibujar_partida(ventana: pygame.Surface, fuente: pygame.font.Font) -> pygame.rect.Rect:
     '''
-    ¿Qué hace?
-    ¿Qué parámetros acepta?
-    ¿Qué retorna?
     '''
 
-    preguntas = lista_preguntas = convertir_csv_a_lista_diccionarios("csv/preguntas.csv")
+    preguntas = convertir_csv_a_lista_diccionarios("csv/preguntas.csv")
     random.shuffle(preguntas)
 
     puntaje = 0
     indice_pregunta = 0
+    tiempo_utilizado = 0
 
     # Margen costado
     ancho_maximo_texto = DIMENSIONES_VENTANA[0] - 100
@@ -195,11 +195,6 @@ def dibujar_partida(ventana: pygame.Surface, fuente: pygame.font.Font) -> pygame
 
         ventana.fill(NEGRO)
 
-        # fondo = pygame.image.load("assets/fondo-preguntas.jpg")
-        # fondo = pygame.transform.scale(fondo, (DIMENSIONES_VENTANA))
-
-        # ventana.blit(fondo, (0, 0))
-
         # Pregunta
         y_actual = 50
         for linea in lineas_pregunta:
@@ -214,14 +209,37 @@ def dibujar_partida(ventana: pygame.Surface, fuente: pygame.font.Font) -> pygame
 
         pygame.display.flip()
 
-        # Espera respuesta
+        # Configuración del temporizador
+        tiempo_restante = 10
+        tiempo_inicio = pygame.time.get_ticks()
+
         respuesta_usuario = None
-        while respuesta_usuario is None:
+        while respuesta_usuario == None and tiempo_restante > 0:
             for evento in pygame.event.get():
                 if evento.type == pygame.QUIT:
                     pygame.quit()
                 if evento.type == pygame.MOUSEBUTTONDOWN:
                     respuesta_usuario = manejar_click_botones(botones_opciones)
+
+            # Actualizar el contador de tiempo
+            tiempo_maximo = 10
+            tiempo_actual = pygame.time.get_ticks()
+            tiempo_restante = max(0, tiempo_maximo - (tiempo_actual - tiempo_inicio) // 1000)
+
+            # Limpiar el área del temporizador
+            rect_tiempo = pygame.Rect(DIMENSIONES_VENTANA[0] - 150, 10, 140, 30)  # Ajusta el tamaño según el texto
+            pygame.draw.rect(ventana, NEGRO, rect_tiempo)  # Rellena con el color de fondo
+
+            # Dibujar el temporizador en la esquina superior derecha
+            texto_tiempo = fuente.render(f"{tiempo_restante}", True, BLANCO)
+            ventana.blit(texto_tiempo, (DIMENSIONES_VENTANA[0] - texto_tiempo.get_width() - 20, 10))
+
+            pygame.display.update(rect_tiempo)
+
+
+        # Calcular el tiempo utilizado para esta pregunta
+        tiempo_usado = (pygame.time.get_ticks() - tiempo_inicio) // 1000
+        tiempo_utilizado += tiempo_usado  # Sumar al total
 
         # Verifica si es correcta
         if respuesta_usuario == respuesta_correcta:
@@ -229,9 +247,10 @@ def dibujar_partida(ventana: pygame.Surface, fuente: pygame.font.Font) -> pygame
 
         indice_pregunta += 1
 
-    nombre_usuario = pedir_nombre_usuario(ventana,fuente,puntaje,len(preguntas))
-    datos_jugador = {'usuario': nombre_usuario,'puntaje': str(puntaje), 'tiempo': str(30)}
-    #Verifico si el puntaje obtenido es mayor al menor del ranking
+    nombre_usuario = pedir_nombre_usuario(ventana, fuente, puntaje, len(preguntas))
+    datos_jugador = {'usuario': nombre_usuario, 'puntaje': str(puntaje), 'tiempo': str(tiempo_utilizado)}
+    
+    # Verifico si el puntaje obtenido es mayor al menor del ranking
     modificar_ranking(datos_jugador)
 
     # Botón para volver al menú
@@ -239,12 +258,9 @@ def dibujar_partida(ventana: pygame.Surface, fuente: pygame.font.Font) -> pygame
 
     pygame.display.flip()
 
-    
     while True:
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 pygame.quit()
             if evento.type == pygame.MOUSEBUTTONDOWN and respuesta_boton_volver_menu_principal.collidepoint(evento.pos):
                 return respuesta_boton_volver_menu_principal
-
-
