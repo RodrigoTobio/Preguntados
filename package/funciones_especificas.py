@@ -20,7 +20,7 @@ def crear_boton_menu(ventana: pygame.Surface, fuente: pygame.font.Font):
 
 # Pantalla de ranking
 # Modificar ranking si el puntaje obtenido es mayor al menor de la lista
-def dibujar_ranking(ventana: pygame.Surface, lista_ranking: list, fuente: pygame.font.Font) -> pygame.rect.Rect:
+def dibujar_ranking(ventana: pygame.Surface, fuente: pygame.font.Font) -> pygame.rect.Rect:
     '''
     ¿Que hace? -> Dibuja la pantalla del ranking con formato de tabla
     ¿Que parametros acepta?
@@ -29,6 +29,7 @@ def dibujar_ranking(ventana: pygame.Surface, lista_ranking: list, fuente: pygame
         -fuente:pygame.font.Font -> fuente utilizada para los textos
     ¿Que retorna?:pygame.rect.Rect -> rectángulo de pygame del botón para volver al menú principal
     '''
+    lista_ranking = convertir_csv_a_lista_diccionarios('csv/ranking.csv')
 
     # ventana.fill(NEGRO)
 
@@ -151,9 +152,10 @@ def buscar_menor_puntaje_ranking(lista: list) -> int:
 
     return indice_menor_valor
 
-def modificar_ranking(lista: list, datos_jugador: dict):
+def modificar_ranking(datos_jugador: dict):
     '''
     '''
+    lista = convertir_csv_a_lista_diccionarios('csv/ranking.csv')
     indice = buscar_menor_puntaje_ranking(lista)
     datos = lista[indice]
 
@@ -163,17 +165,17 @@ def modificar_ranking(lista: list, datos_jugador: dict):
           int(datos_jugador['tiempo']) < int(datos['tiempo'])):
         lista[indice] = datos_jugador
 
-    # return lista
-    # MODIFICAR ACA PARA CAMBIAR RANKING
+    lista = ordenar_lista_diccionarios(lista)
+    convertir_lista_diccionarios_a_csv(lista,'csv/ranking.csv')
 
-
-
-def dibujar_partida(ventana: pygame.Surface, preguntas: list, fuente: pygame.font.Font, lista_ranking: list) -> pygame.rect.Rect:
+def dibujar_partida(ventana: pygame.Surface, fuente: pygame.font.Font) -> pygame.rect.Rect:
     '''
     ¿Qué hace?
     ¿Qué parámetros acepta?
     ¿Qué retorna?
     '''
+
+    preguntas = lista_preguntas = convertir_csv_a_lista_diccionarios("csv/preguntas.csv")
     random.shuffle(preguntas)
 
     puntaje = 0
@@ -192,6 +194,11 @@ def dibujar_partida(ventana: pygame.Surface, preguntas: list, fuente: pygame.fon
         lineas_pregunta = ajustar_texto(pregunta, fuente, ancho_maximo_texto)
 
         ventana.fill(NEGRO)
+
+        # fondo = pygame.image.load("assets/fondo-preguntas.jpg")
+        # fondo = pygame.transform.scale(fondo, (DIMENSIONES_VENTANA))
+
+        # ventana.blit(fondo, (0, 0))
 
         # Pregunta
         y_actual = 50
@@ -223,10 +230,9 @@ def dibujar_partida(ventana: pygame.Surface, preguntas: list, fuente: pygame.fon
         indice_pregunta += 1
 
     nombre_usuario = pedir_nombre_usuario(ventana,fuente,puntaje,len(preguntas))
-    datos_jugador = {'usuario': nombre_usuario,'puntaje': puntaje, 'tiempo': 30}
+    datos_jugador = {'usuario': nombre_usuario,'puntaje': str(puntaje), 'tiempo': str(30)}
     #Verifico si el puntaje obtenido es mayor al menor del ranking
-    nuevo_ranking = modificar_ranking(lista_ranking, datos_jugador)
-    print(nuevo_ranking)
+    modificar_ranking(datos_jugador)
 
     # Botón para volver al menú
     respuesta_boton_volver_menu_principal = crear_boton_menu(ventana, fuente)

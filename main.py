@@ -17,9 +17,6 @@ fuente = pygame.font.Font(None, 48)
 opciones_menu_principal = ["Jugar Partida", "Ranking", "Configuración", "Salir"]
 botones_menu_principal = crear_botones(opciones_menu_principal, DIMENSIONES_BOTONES_MENU_PRINCIPAL[1], DIMENSIONES_BOTONES_MENU_PRINCIPAL[0], DIMENSIONES_BOTONES_MENU_PRINCIPAL[2])
 
-lista_ranking = convertir_csv_a_lista_diccionarios("csv/ranking.csv")
-lista_preguntas = convertir_csv_a_lista_diccionarios("csv/preguntas.csv")
-
 iniciado = True
 mostrar_ranking = False
 mostrar_configuraciones = False
@@ -32,8 +29,7 @@ while iniciado:
 
         if evento.type == pygame.MOUSEBUTTONDOWN:
             if mostrar_ranking:
-                rect_boton_volver = dibujar_ranking(
-                    ventana, lista_ranking, fuente)
+                rect_boton_volver = dibujar_ranking(ventana, fuente)
                 if rect_boton_volver.collidepoint(evento.pos):
                     mostrar_ranking = False
             elif mostrar_configuraciones:
@@ -46,8 +42,7 @@ while iniciado:
                     print(f"Has hecho clic en '{boton_clickeado}'")
                     match boton_clickeado:
                         case "Jugar Partida":
-                            dibujar_partida(
-                                ventana, lista_preguntas, fuente, lista_ranking)
+                            dibujar_partida(ventana, fuente)
                             mostrar_partida = False
                         case "Ranking":
                             mostrar_ranking = True
@@ -59,7 +54,7 @@ while iniciado:
     ventana.blit(fondo, (0, 0))
 
     if mostrar_ranking:
-        dibujar_ranking(ventana, lista_ranking, fuente)
+        dibujar_ranking(ventana, fuente)
     elif mostrar_configuraciones:
         dibujar_configuraciones(ventana, fuente)
     else:
